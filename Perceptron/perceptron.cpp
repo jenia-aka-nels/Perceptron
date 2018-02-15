@@ -1,4 +1,5 @@
 #include "perceptron.h"
+#include <vector>
 
 using namespace std;
 
@@ -104,9 +105,38 @@ double* Perceptron::train(unsigned char* input, char output)
 	return result;
 }
 
+void Perceptron::shuffle()
+{
+	unsigned char** datacopy = new unsigned char*[number_of_images];
+	unsigned char* labelscopy = new unsigned char[number_of_images];
+	for (int i = 0; i < 60000; i++)
+	{
+		datacopy[i] = dataset[i];
+		labelscopy[i] = labels[i];
+	}
+
+	vector<int> indexes;
+	for (int i = 0; i < 60000; i++)
+	{
+		indexes.push_back(i);
+	}
+	
+	int randid;
+	for (int i = 0; i < 60000; i++)
+	{
+		randid = rand() % (indexes.size());
+		dataset[i] = datacopy[indexes[randid]];
+		labels[i] = labelscopy[indexes[randid]];
+		indexes.erase(indexes.begin() + randid);
+	}
+}
+
 void Perceptron::Train()
 {
 	double* result;
+	dataset = mnist->read_mnist_train_images(number_of_images, image_size);
+	labels = mnist->read_mnist_train_labels(number_of_labels);
+	shuffle();
 	for (int i = 0; i < number_of_images; i++)
 	{
 		result = train(dataset[i], labels[i]);

@@ -24,6 +24,7 @@ private:
 
 	double* train(unsigned char* input, char output);
 	bool test(unsigned char* input, char output);
+	void shuffle();
 public:
 	Perceptron(string datapath, int _s, float speed);
 	void Train();
